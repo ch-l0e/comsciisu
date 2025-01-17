@@ -20,17 +20,18 @@ def convert(base_hex):
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
     return h, s, v
 
-def store_colours(a_list):
+def store_colours(dictionary):
     global data
-    data["colour1"] = a_list[0]
-    data["colour2"] = a_list[1]
-    data["colour3"] = a_list[2]
-    data["colour4"] = a_list[3]
-    data["colour5"] = a_list[4]
+    data["colour1"] = dictionary[0]
+    data["colour2"] = dictionary[1]
+    data["colour3"] = dictionary[2]
+    data["colour4"] = dictionary[3]
+    data["colour5"] = dictionary[4]
 
 def monochromatic(base_hex):
     h, s, v = convert(base_hex)
 
+    #Darker than input colour
     scheme = []
     for i in range(2, 0, -1):
         new_v = max(0, v * (1 - 0.2 * i))
@@ -41,6 +42,7 @@ def monochromatic(base_hex):
     
     scheme.append(base_hex)
 
+    #lighter than input colour
     for i in range(1, 3):
         new_v = min(1, v * (1 + 0.2 * i))
         new_r, new_g, new_b = colorsys.hsv_to_rgb(h, s, new_v)
@@ -128,9 +130,11 @@ def complementary(base_hex):
             continue
     return scheme
 
-def warmer_button_instructions():
+def cooler_button_instructions():
     global data
     h, s, v = convert(data["adjusted_colour"])
+    if h == 0:
+        h = h + 0.05
     new_h = min(1, h * 1.05)
     new_r, new_g, new_b = colorsys.hsv_to_rgb(new_h, s, v)
     data["adjusted_colour"] = "#{:02x}{:02x}{:02x}".format(int(new_r * 255), int(new_g * 255), int(new_b * 255))
@@ -139,7 +143,7 @@ def warmer_button_instructions():
     colour_hex = tk.Label(colour_frame, text = data["adjusted_colour"], width = 10)
     colour_hex.grid(row = 2, column = data["adjust_colour_num"] - 1, padx = 5, pady = 5)
 
-def cooler_button_instructions():
+def warmer_button_instructions():
     global data
     h, s, v =convert(data["adjusted_colour"])
     new_h = max(0, h * 0.95)
@@ -241,6 +245,7 @@ def how_to_start():
     start_button = tk.Button(colour_frame, text = "start", command = start_button_instructions)
     start_button.pack(pady = 10)
 
+#no colour in mind
 def no_idea_start():
     select_variation_text = tk.Label(colour_frame, text = "Select variation")
     select_variation_text.pack(pady = 20)
@@ -448,11 +453,11 @@ def choose_hsv():
             darker_button.grid(row = 5, column = 3, padx = 5, pady = 5)
 
         else:
-            warmer_button = tk.Button(adjust_frame, text = "cooler", command = warmer_button_instructions)
-            warmer_button.grid(row = 5, column = 1, padx = 5, pady = 5)
+            cooler_button = tk.Button(adjust_frame, text = "cooler", command = cooler_button_instructions)
+            cooler_button.grid(row = 5, column = 1, padx = 5, pady = 5)
 
-            cooler_button = tk.Button(adjust_frame, text = "warmer", command = cooler_button_instructions)
-            cooler_button.grid(row = 5, column = 3, padx = 5, pady = 5)
+            warmer_button = tk.Button(adjust_frame, text = "warmer", command = warmer_button_instructions)
+            warmer_button.grid(row = 5, column = 3, padx = 5, pady = 5)
 
     go_button = tk.Button(colour_frame, text = "go", command = go_button_instructions)
     go_button.grid(row = 4, column = 3, padx = 5, pady = 5)
