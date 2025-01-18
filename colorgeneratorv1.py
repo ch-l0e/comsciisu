@@ -2,6 +2,7 @@ import colorsys
 import tkinter as tk
 
 #creating the data
+
 data = {
     "base_colour" : ""
 }
@@ -28,6 +29,7 @@ def store_colours(dictionary):
     data["colour4"] = dictionary[3]
     data["colour5"] = dictionary[4]
 
+#monochromatic colour palette
 def monochromatic(base_hex):
     h, s, v = convert(base_hex)
 
@@ -52,6 +54,7 @@ def monochromatic(base_hex):
     
     return scheme
 
+#analogous colour palette
 def analogous(base_hex):
     scheme = monochromatic(base_hex)
     for i in range(0, 2):
@@ -83,6 +86,7 @@ def analogous(base_hex):
         scheme[i] = hex_colour
     return scheme
 
+#complementary colour palette
 def complementary(base_hex):
     scheme = monochromatic(base_hex)
     
@@ -129,6 +133,9 @@ def complementary(base_hex):
         else:
             continue
     return scheme
+
+
+#ADJUST BUTTON INSTRUCTIONS
 
 def cooler_button_instructions():
     global data
@@ -198,6 +205,9 @@ def darker_button_instructions():
     colour_hex = tk.Label(colour_frame, text = data["adjusted_colour"], width = 10)
     colour_hex.grid(row = 2, column = data["adjust_colour_num"] - 1, padx = 5, pady = 5)
 
+
+#FRONT END
+
 root = tk.Tk()
 root.title("color generator")
 root.geometry("1000x600")
@@ -226,6 +236,7 @@ def destroy_adjust_buttons():
     for widget in adjust_frame.winfo_children():
         widget.destroy()
 
+#Starting the application (base colour or no colour in mind)
 def how_to_start():
     start_text = tk.Label(colour_frame, text = "select option")
     start_text.pack(pady = 20)
@@ -268,6 +279,8 @@ def no_idea_start():
 
 def choose_base():
     global dull
+
+      #Dull colour options
     if dull:
         global dull_mute_colours
         for i in range(0, 6):
@@ -302,6 +315,7 @@ def choose_base():
         next2_button = tk.Button(colour_frame, text = "next", command = next2_button_instructions)
         next2_button.grid(row = 2, column = 3, padx = 5,pady = 5)
 
+    #bright colour options
     else:
         global bright_colours
         for i in range(0, 6):
@@ -336,6 +350,7 @@ def choose_base():
         next2_button = tk.Button(colour_frame, text = "next", command = next2_button_instructions)
         next2_button.grid(row = 2, column = 3, padx = 5,pady = 5)
 
+#Get user input for base colour (base colour start)
 def base_colour_start():
     text = tk.Label(colour_frame, text = "Enter a colour in hex (include '#')")
     text.pack(pady = 20)
@@ -355,6 +370,7 @@ def base_colour_start():
     enter_button = tk.Button(colour_frame, text = "Enter", command = enter_button_instructions)
     enter_button.pack(pady = 10)
 
+#choose type of palette and generate
 def scheme_and_generate(base_colour):
     text2 = tk.Label(colour_frame, text = "Select colour scheme")
     text2.pack(pady = 20)
@@ -400,6 +416,7 @@ def scheme_and_generate(base_colour):
     generate_button = tk.Button(colour_frame, text = "generate", command = generate_button_instructions)
     generate_button.pack(pady = 10)
 
+#choose colour to adjust
 def choose_adjust():
     select_adjust = tk.StringVar(value = "colour1")
     adjust_options = tk.OptionMenu(colour_frame, select_adjust, "colour1", "colour2", "colour3", "colour4", "colour5")
@@ -429,6 +446,7 @@ def choose_adjust():
     adjust_button = tk.Button(colour_frame, text = "adjust", command = adjust_button_instructions)
     adjust_button.grid(row = 3, column = 3, padx = 5, pady = 5)
     
+#choose aspect of colour to adjust
 def choose_hsv():
     select_hsv = tk.StringVar(value = "hue")
     hsv_options = tk.OptionMenu(colour_frame, select_hsv, "hue", "saturation", "value")
@@ -462,6 +480,7 @@ def choose_hsv():
     go_button = tk.Button(colour_frame, text = "go", command = go_button_instructions)
     go_button.grid(row = 4, column = 3, padx = 5, pady = 5)
 
+#restarts the application
 def restart():
     def restart_button_instructions():
         for widget in colour_frame.winfo_children():
